@@ -23,3 +23,5 @@ assert F8(seq) == 23/16
 assert F9(seq) == 1
 
 assert F10(seq) == 0
+
+assert F15(seq) == 16
