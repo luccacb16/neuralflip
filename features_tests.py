@@ -24,6 +24,9 @@ assert F9(seq) == 1
 
 assert F10(seq) == 0
 
+assert F13(seq) == 17
+assert F13(seq2) == 1
+
 assert F15(seq) == 16
 
 assert round(F16(seq), 4) == 0.9954
