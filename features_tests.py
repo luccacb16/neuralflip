@@ -1,4 +1,4 @@
-from features import *
+from featuresImport import *
 
 seq = '01000101110010110110010001110100101101010010010100'
 seq2 = '00000000000000000000000001111111111111111111111111'
@@ -30,6 +30,15 @@ assert F11(seq2) == 0
 assert F12(seq) == 0
 assert F12(seq2) == 0
 
+assert F13(seq) == 17
+assert F13(seq2) == 1
+
+assert F14(seq) == 16
+assert F14(seq2) == 1
+
 assert F15(seq) == 16
 
 assert round(F16(seq), 4) == 0.9954
+
+assert F19(seq) == 10
+assert F19(seq2) == 24
