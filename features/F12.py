@@ -11,6 +11,6 @@ def F12(seq: str) -> int:
         int: diferença entre maior sequência de 0s e 1s
     '''
     
-    maior_seq_0 = max([s for s in seq.split('1') if s], key=len)
-    maior_seq_1 = max([s for s in seq.split('0') if s], key=len)
+    maior_seq_0 = max([s for s in seq.split('1') if s], key=len, default='')
+    maior_seq_1 = max([s for s in seq.split('0') if s], key=len, default='')
     return abs(len(maior_seq_0) - len(maior_seq_1))

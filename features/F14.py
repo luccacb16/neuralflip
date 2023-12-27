@@ -12,5 +12,4 @@ def F14(seq: str) -> int:
     '''
     
     seqs_1 = [s for s in seq.split('0') if s]
-    print(len(seqs_1))
     return len(seqs_1)
