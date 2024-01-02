@@ -21,6 +21,18 @@
         <div class="about-container">
           <a class="about-link" href="./sobre.html">Sobre</a>
         </div>
+
+        <div class="dropdown">
+          <div class="select">
+            <div class="caret"></div>
+            <div class="flag selected"><img src="../static/img/br.png" alt="PT-BR" /></div>
+          </div>
+          <ul class="menu">
+            <li data-value="pt-br" class="flag active"><img src="../static/img/br.png" alt="PT-BR" /></li>
+            <li data-value="en-us" class="flag"><img src="../static/img/us.png" alt="EN-US" /></li>
+          </ul>
+        </div>        
+
         <div class="social-icons">
           <a href="https://github.com/luccacb16/neuralflip"><img class="github-icon" src="../static/img/github.png" alt="GitHub"/></a>
           <a href="https://www.linkedin.com/company/panda-ufscar/"><img class="linkedin-icon" src="../static/img/linkedin.png" alt="LinkedIn"/></a>
@@ -39,6 +51,7 @@
       </div>
       <button class="generate-button" id="gerar" type="button">GERAR</button>
     </section>
+    <span class="error-message" id="error-message">A sequência deve ser composta por 50 caracteres, sendo eles apenas 0s ou 1s</span>
     <section class="prediction">
       <div class="prediction-content">
         <p class="prediction-label">PREDIÇÃO: <span id="prediction-value"></span></p>
@@ -59,5 +72,6 @@
 <script src="../static/js/gerar.js" type="module"></script>
 <script src="../static/js/contador.js" type="module"></script>
 <script src="../static/js/predict.js" type="module"></script>
+<script src="../static/js/language.js" type="module"></script>
 
 </html>

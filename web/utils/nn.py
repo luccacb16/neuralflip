@@ -51,8 +51,18 @@ def _predict(features):
         conf = output.cpu().numpy()
         pred = (conf[0] > 0.5).astype(int)
         
-        # Mapeamento da predição
-        classmap = {0: 'Máquina', 1: 'Humana'}
-        pred = classmap[pred]
-        
-        return pred, '{:.2f}'.format(float(max(conf[0], 1-conf[0]) * 100))
+        return int(pred), '{:.2f}'.format(float(max(conf[0], 1-conf[0]) * 100))
+    
+'''
+validate
+
+Função que recebe a sequência e retorna se a sequência é válida ou não.
+
+Args:
+    - seq (str): sequência
+    
+Returns:
+    - valid (bool): True se a sequência é válida, False caso contrário
+'''
+def validate(seq: str):
+    return len(seq) == 50 and all([n in '01' for n in seq])

@@ -1,27 +1,29 @@
 async function predict() {
     const seq = document.querySelector('.example-sequence').value;
+    const predictionElement = document.querySelector('.prediction');
+    const errorMessage = document.querySelector('.error-message');
 
-    // TODO: Melhorar o tratamento de erros mudando o CSS
-    if (seq.length != 50) {
-        alert('A sequência deve ter pelo menos 50 caractéres!');
+    if (seq.length != 50 || !seq.match(/^[01]+$/i)) {
+        errorMessage.style.display = 'flex';
+        if (predictionElement.style.display === 'flex') {
+            predictionElement.style.display = 'none';
+        }
         return;
     }
 
-    if (!seq.match(/^[01]+$/i)) {
-        alert('A sequência deve conter apenas os caracteres 0 ou 1');
-        return;
+    try {
+        const response = await fetch('/predict/' + seq);
+        const data = await response.json();
+
+        document.getElementById('prediction-value').textContent = data.pred;
+        document.getElementById('confidence-value').textContent = data.conf + '%';
+
+        errorMessage.style.display = 'none';
+        predictionElement.style.display = 'flex';
+    } catch (error) {
+        console.error('Erro:', error);
+        errorMessage.style.display = 'flex';
     }
-
-    await fetch('/predict/' + seq)
-        .then(response => response.json())
-        .then(data => {
-            console.log(data)
-            document.getElementById('prediction-value').textContent = data.pred.toUpperCase();
-            document.getElementById('confidence-value').textContent = data.conf + '%';
-        })
-        .catch(error => console.error('Erro:', error));
-
-    document.querySelector('.prediction').style.display = 'flex';
 }
 
 document.getElementById('enviar').addEventListener('click', predict);
