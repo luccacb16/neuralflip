@@ -5,7 +5,7 @@ from .utils.features import extract_features
 from .utils.nn import _predict, validate
 
 from . import db
-from .db import Sequences
+from .db import Sequences, checkRetrain
 
 def routes(app):
     # Index
@@ -69,8 +69,6 @@ def routes(app):
         seq = data.get('seq')
         label = data.get('label')
         
-        print(data)
-        
         # Adiciona a sequência ao banco de dados
         sequence = Sequences(seq=seq, label=label)
         db.session.add(sequence)
@@ -80,6 +78,18 @@ def routes(app):
             'seq': seq,
             'label': label,
             'msg': 'Feedback enviado com sucesso!'
+        }
+        
+        return jsonify(ret), 200
+    
+    @app.get('/retrain')
+    def retrain():
+        tempo, loss = checkRetrain()
+        
+        ret = {
+            'msg': 'Retreinamento concluído',
+            'tempo': tempo,
+            'loss': loss
         }
         
         return jsonify(ret), 200
