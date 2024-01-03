@@ -1,7 +1,7 @@
 import torch
 import os
 
-device = 'cuda' if torch.cuda.is_available() else 'cpu'
+device = 'cpu'
 
 class NeuralNetwork(torch.nn.Module):
     def __init__(self):
