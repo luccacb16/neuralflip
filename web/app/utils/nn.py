@@ -1,4 +1,5 @@
 import torch
+import os
 
 device = 'cuda' if torch.cuda.is_available() else 'cpu'
 
@@ -36,7 +37,10 @@ class NeuralNetwork(torch.nn.Module):
     
 nn = NeuralNetwork().to(device)
 
-load = torch.load('./utils/modelo.pt')
+dir = os.path.dirname(os.path.abspath(__file__))
+path = os.path.join(dir, 'modelo.pt')
+
+load = torch.load(path)
 nn.load_state_dict(load['state_dict'])
 nn.norm_params = load['norm_params']
 
