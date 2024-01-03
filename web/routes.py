@@ -1,8 +1,11 @@
 from flask import render_template, request, redirect, url_for, jsonify, session
 from random import choices
 
-from utils.features import extract_features
-from utils.nn import _predict, validate
+from .utils.features import extract_features
+from .utils.nn import _predict, validate
+
+from . import db
+from .db import Sequences
 
 def routes(app):
     # Index
@@ -56,9 +59,30 @@ def routes(app):
             'en-us': 'MACHINE' if pred == 0 else 'HUMAN'
         }
         
-        pred = predLanguageMap[session['language']]
+        predtxt = predLanguageMap[session['language']]
                 
-        return jsonify({'pred': pred, 'conf': conf}), 200
+        return jsonify({'predtxt': predtxt, 'pred': pred, 'conf': conf}), 200
+    
+    @app.post('/feedback')
+    def feedback():
+        data = request.get_json()
+        seq = data.get('seq')
+        label = data.get('label')
+        
+        print(data)
+        
+        # Adiciona a sequência ao banco de dados
+        sequence = Sequences(seq=seq, label=label)
+        db.session.add(sequence)
+        db.session.commit()
+        
+        ret = {
+            'seq': seq,
+            'label': label,
+            'msg': 'Feedback enviado com sucesso!'
+        }
+        
+        return jsonify(ret), 200
 
     '''
     gerar

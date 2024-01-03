@@ -1,4 +1,10 @@
 async function predict() {
+    const errado = document.getElementById('errado');
+    const certo = document.getElementById('certo');
+
+    errado.style.display = 'flex';
+    certo.style.display = 'flex';
+
     const seq = document.querySelector('.example-sequence').value;
     const predictionElement = document.querySelector('.prediction');
     const errorMessage = document.querySelector('.error-message');
@@ -15,7 +21,8 @@ async function predict() {
         const response = await fetch('/predict/' + seq);
         const data = await response.json();
 
-        document.getElementById('prediction-value').textContent = data.pred;
+        document.getElementById('prediction-value').textContent = data.predtxt;
+        document.getElementById('prediction-value').val = data.pred;
         document.getElementById('confidence-value').textContent = data.conf + '%';
 
         errorMessage.style.display = 'none';
