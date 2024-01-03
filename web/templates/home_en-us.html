@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <link rel="icon" href="../static/img/favicon.ico" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="theme-color" content="#000000" />
+  <title>NeuralFlip</title>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Montserrat%3A400%2C700%2C800"/>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro%3A400%2C700%2C800"/>
+  <link rel="stylesheet" href="../static/css/style.css"/>
+</head>
+<body>
+  <div class="container">
+    <header class="header">
+      <div class="header-content">
+        <a href=""><img class="logo" src="../static/img/logo.png" alt="Logo NeuralFlip"/></a>
+        <a href="" class="title-text"><h1 class="site-title">NeuralFlip</h1></a>
+      </div>
+      <nav class="social-nav">
+        <div class="about-container">
+          <a class="about-link" href="./sobre.html">About</a>
+        </div>
+
+        <div class="dropdown">
+          <div class="select">
+            <div class="caret"></div>
+            <div class="flag selected"><img src="../static/img/br.png" alt="PT-BR" /></div>
+          </div>
+          <ul class="menu">
+            <li data-value="pt-br" class="flag active"><img src="../static/img/br.png" alt="PT-BR" /></li>
+            <li data-value="en-us" class="flag"><img src="../static/img/us.png" alt="EN-US" /></li>
+          </ul>
+        </div>        
+
+        <div class="social-icons">
+          <a href="https://github.com/luccacb16/neuralflip"><img class="github-icon" src="../static/img/github.png" alt="GitHub"/></a>
+          <a href="https://www.linkedin.com/company/panda-ufscar/"><img class="linkedin-icon" src="../static/img/linkedin.png" alt="LinkedIn"/></a>
+          <a href="https://www.instagram.com/pandaufscar/"><img class="instagram-icon" src="../static/img/instagram.png" alt="Instagram"/></a>
+        </div>
+      </nav>
+    </header>
+    <section class="sequence-input">
+      <p class="input-label">FILL IN WITH A SEQUENCE</p>
+      <div class="input-group">
+        <input type="text" class="example-sequence" placeholder="ex: 11100101001100101001110011001011000100110000010100">
+        <span class="sequence-counter">0/50</span>
+        <button class="btn" id="enviar" type="button">
+          <img class="arrow-icon" src="../static/img/arrow.png" alt="Submit"/>
+        </button>
+      </div>
+      <button class="generate-button" id="gerar" type="button">GENERATE</button>
+    </section>
+    <span class="error-message" id="error-message">The sequence must be composed of 50 characters, with only 0s or 1s</span>
+    <section class="prediction">
+      <div class="prediction-content">
+        <p class="prediction-label">PREDICTION: <span id="prediction-value"></span></p>
+        <p class="confidence">CONFIDENCE: <span id="confidence-value"></span></p>
+      </div>
+      <div class="prediction-icons">
+        <button class="btn" id="errado" type="button">
+          <img class="prediction-errado" src="../static/img/errado.png" alt="errado"/>
+        </button>
+        <button class="btn" id="certo" type="button">
+          <img class="prediction-certo" src="../static/img/certo.png" alt="certo"/>
+        </button>
+      </div>
+    </section>
+  </div>
+</body>
+
+<script src="../static/js/gerar.js" type="module"></script>
+<script src="../static/js/contador.js" type="module"></script>
+<script src="../static/js/predict.js" type="module"></script>
+<script src="../static/js/feedback.js" type="module"></script>
+<script src="../static/js/language.js" type="module"></script>
+
+</html>
