@@ -40,7 +40,7 @@ nn = NeuralNetwork().to(device)
 dir = os.path.dirname(os.path.abspath(__file__))
 path = os.path.join(dir, 'modelo.pt')
 
-load = torch.load(path)
+load = torch.load(path, map_location=device)
 nn.load_state_dict(load['state_dict'])
 nn.norm_params = load['norm_params']
 
