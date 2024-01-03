@@ -5,7 +5,7 @@ from .utils.features import extract_features
 from .utils.nn import _predict, validate
 
 from . import db
-from .db import Sequences
+from .db import Sequences, checkRetrain
 
 def routes(app):
     # Index
@@ -46,7 +46,7 @@ def routes(app):
     def predict(seq: str):
         # Validação da sequência
         if not validate(seq):
-            return jsonify({'erro': 'Sequência inválida'}), 400
+            return jsonify({ 'erro': 'Sequência inválida' }), 400
         
         # Extração das features
         features = extract_features(seq)
@@ -61,7 +61,7 @@ def routes(app):
         
         predtxt = predLanguageMap[session['language']]
                 
-        return jsonify({'predtxt': predtxt, 'pred': pred, 'conf': conf}), 200
+        return jsonify({ 'predtxt': predtxt, 'pred': pred, 'conf': conf }), 200
     
     @app.post('/feedback')
     def feedback():
@@ -69,20 +69,21 @@ def routes(app):
         seq = data.get('seq')
         label = data.get('label')
         
-        print(data)
-        
         # Adiciona a sequência ao banco de dados
         sequence = Sequences(seq=seq, label=label)
         db.session.add(sequence)
         db.session.commit()
+
+        return jsonify({ 'seq': seq, 'label': label, 'msg': 'Feedback enviado com sucesso!' }), 200
+    
+    @app.get('/retrain')
+    def retrain():
+        tempo, loss = checkRetrain()
         
-        ret = {
-            'seq': seq,
-            'label': label,
-            'msg': 'Feedback enviado com sucesso!'
-        }
+        if tempo == 0 and loss == 0:
+            return jsonify({ 'msg': 'Não há tuplas suficientes para retreinar a rede' }), 400
         
-        return jsonify(ret), 200
+        return jsonify({ 'msg': 'Retreinamento concluído', 'tempo': tempo, 'loss': loss }), 200
 
     '''
     gerar
@@ -94,4 +95,8 @@ def routes(app):
     '''
     @app.get('/gerar')
     def gerar() -> str:
-        return jsonify({'seq': ''.join(choices('01', k=50))})
+        return jsonify({ 'seq': ''.join(choices('01', k=50)) })
+    
+    @app.get('/ping')
+    def ping():
+        return {'status': 'Online'}, 200
