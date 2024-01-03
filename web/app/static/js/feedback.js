@@ -27,8 +27,7 @@ function enviarFeedback(feedbackTipo) {
             fetch('/retrain')
             .then(response => response.json())
             .then(data => {
-                console.log('Retreinamento realizado com sucesso em ' + data.tempo + 's')
-                console.log('Loss: ' + data.loss)
+                console.log(data)
             })
             .catch(error => console.error('Erro na solicitação:', error));
 

@@ -39,9 +39,9 @@ def checkRetrain():
     # Deleta as tuplas
     for id in zeros_id:
         deleteById(id[0])
-        
     for id in ones_id:
         deleteById(id[0])
+    db.session.commit()
     
     # Retreina
     tempo, loss = retrain(seqs, labels)
@@ -58,4 +58,3 @@ def findIdsByLabel(label: int) -> list:
 
 def deleteById(id: int) -> None:
     Sequences.query.filter_by(id=id).delete(synchronize_session=False)
-    db.session.commit()
