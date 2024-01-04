@@ -18,5 +18,9 @@ def create_app():
         db.create_all()
 
     routes(app)
+    
+    # Manter o backend online
+    from .utils.keep_online import keep_online
+    keep_online()
 
     return app
