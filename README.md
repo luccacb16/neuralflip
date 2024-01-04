@@ -19,7 +19,9 @@ A grande parte dos humanos possui, mesmo que inconscientemente, a crença descri
 
 *A falácia do apostador, também conhecida como falácia de Monte Carlo, consiste na crença de que a ocorrência de desvios no comportamento esperado para uma sequência de eventos independentes de algum processo aleatório implica uma maior probabilidade de se obter, em seguida, desvios na direção oposta.*
 
-Esse comportamento pode ser visto em jogos de azar, como roleta, onde um jogador pode acreditar que, após uma sequência de resultados de uma mesma cor, a cor oposta tem maior probabilidade de ocorrer, por isso o nome de falácia do apostador. Esse mesmo comportamento pode ser observadp ao tentar gerar uma sequência de lançamentos de moeda (*coin flips*) como na brincadeira Cara ou Coroa. Nós humanos tendemos a acreditar que sequências muito longas de uma mesma face da moeda são menos prováveis de ocorrer, apesar de serem eventos independentes entre si, possuindo a mesma probabilidade.
+Esse comportamento pode ser visto em jogos de azar, como roleta, onde um jogador pode acreditar que, após uma sequência de resultados de uma mesma cor, a cor oposta tem maior probabilidade de ocorrer, por isso o nome de falácia do apostador. Esse mesmo comportamento pode ser observado ao tentar gerar uma sequência de lançamentos de moeda (*coin flips*) como na brincadeira Cara ou Coroa. Nós humanos tendemos a acreditar que sequências muito longas de uma mesma face da moeda são menos prováveis de ocorrer, apesar de serem eventos independentes entre si, possuindo a mesma probabilidade.
+
+### **Inspiração**
 
 Inspirados pelo vídeo do canal [MindingTheData](https://www.youtube.com/watch?v=2WiRFLImSvE) *'Are You Good at Being Random? | Attempting to Fake Randomness'*, em que ele cria um classificador para esse problema utilizando uma árvore de decisão, decidimos criar um classificador para esse problema utilizando uma rede neural.
 
