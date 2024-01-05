@@ -1,4 +1,7 @@
 function enviarFeedback(feedbackTipo) {
+    errado.style.display = 'none';
+    certo.style.display = 'none';
+    
     const seq = document.querySelector('.example-sequence').value;
     let label = Number(document.getElementById('prediction-value').val);
 
@@ -20,9 +23,6 @@ function enviarFeedback(feedbackTipo) {
         if (response.ok) {
             const errado = document.getElementById('errado');
             const certo = document.getElementById('certo');
-
-            errado.style.display = 'none';
-            certo.style.display = 'none';
 
             fetch('/retrain')
             .then(response => response.json())

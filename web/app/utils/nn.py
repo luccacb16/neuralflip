@@ -92,15 +92,27 @@ def _retrain(optimizer, loss_function, train_loader):
     nn.load_state_dict(nn_copy.state_dict())
     
     return epoch_loss
-    
+
+def updateMinMax(features):  
+    for i, (min, max) in enumerate(nn.norm_params):
+        if features[i] < min: # Novo valor mínimo
+            nn.norm_params[i] = (features[i], max)
+            
+        if features[i] > max: # Novo valor máximo
+            nn.norm_params[i] = (min, features[i])
+            
 def retrain(seqs: list, labels: list):
     start = time.time()
     
     # Extrai as features
-    features = [torch.tensor(extract_features(seq), dtype=torch.float32) for seq in seqs]
+    features = [extract_features(seq) for seq in seqs]
+    
+    # Verifica novos valores mínimos e máximos
+    for feature in features:
+        updateMinMax(feature)
     
     # Normaliza as features
-    features = [nn.normalize(f) for f in features]
+    features = [nn.normalize(torch.tensor(f, dtype=torch.float32)) for f in features]
     
     # Converte as features e labels para tensor
     features = torch.stack(features).to(device)
