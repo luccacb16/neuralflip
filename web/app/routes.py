@@ -1,12 +1,13 @@
 from flask import render_template, request, redirect, url_for, jsonify, session
 from random import choices
+import time
 
 from .utils.features import extract_features
-from .utils.nn import _predict, validate
+from .utils.nn import _predict, validate, train, metricas, nn
 
-from . import db
-from .db import Sequences, checkRetrain
-
+from .db.sequences import addSequenceToDB, checkRetrain, getSequences
+from .db.models import saveModel
+    
 def routes(app):
     # Index
     @app.route('/')
@@ -43,7 +44,7 @@ def routes(app):
         - pred (str): predição da rede neural
     '''
     @app.get('/predict/<seq>')
-    def predict(seq: str):
+    def predict(seq: str):        
         # Validação da sequência
         if not validate(seq):
             return jsonify({ 'erro': 'Sequência inválida' }), 400
@@ -70,20 +71,29 @@ def routes(app):
         label = data.get('label')
         
         # Adiciona a sequência ao banco de dados
-        sequence = Sequences(seq=seq, label=label)
-        db.session.add(sequence)
-        db.session.commit()
+        addSequenceToDB(seq, label)
 
         return jsonify({ 'seq': seq, 'label': label, 'msg': 'Feedback enviado com sucesso!' }), 200
     
     @app.get('/retrain')
     def retrain():
-        tempo, loss = checkRetrain()
-        
-        if tempo == 0 and loss == 0:
-            return jsonify({ 'msg': 'Não há tuplas suficientes para retreinar a rede' }), 400
-        
-        return jsonify({ 'msg': 'Retreinamento concluído', 'tempo': tempo, 'loss': loss }), 200
+        if checkRetrain(8):            
+            # Salva o modelo no BD
+            report = metricas(nn)
+            saveModel(nn, report)
+    
+            seqs, labels = getSequences()
+            
+            start = time.time()
+            loss = train(seqs, labels)
+            end = time.time()
+            
+            tempo = '{:.2f}'.format(end - start)
+            
+            print(f'Tempo de retreinamento: {tempo} segundos - Loss: {loss:.4f}')
+            return jsonify({ 'msg': 'Retreinamento concluído', 'tempo': tempo, 'loss': loss }), 200
+
+        return jsonify({ 'msg': 'Não há tuplas suficientes para retreinar a rede' }), 400
 
     '''
     gerar

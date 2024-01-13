@@ -8,7 +8,7 @@ def ping():
     def req():
         try:
             response = requests.get(os.environ.get('URL') + '/ping')
-            print(f"Resposta recebida: {response.text}")
+            print(response)
         except requests.RequestException as e:
             print(f"Erro na solicitação: {e}")
 

@@ -2,8 +2,9 @@ from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 import os
 
-from .db import db
 from .routes import routes
+from .db.db import db
+from .utils.nn import loadModel
 
 def create_app():
     app = Flask(__name__)
@@ -16,11 +17,13 @@ def create_app():
 
     with app.app_context():
         db.create_all()
+        loadModel()
 
     routes(app)
     
     # Manter o backend online
-    from .utils.keep_online import keep_online
-    keep_online()
+    if (os.environ.get('PING') == 'True'):
+        from .utils.keep_online import keep_online
+        keep_online()
 
     return app
