@@ -1,19 +1,22 @@
 import torch
 from torch.utils.data import DataLoader, TensorDataset
 import os
-import time
+from sklearn.metrics import classification_report
+import pandas as pd
 
 from .features import extract_features
+from ..db.models import getModel
 
+dir = os.path.dirname(os.path.abspath(__file__))
 device = 'cpu'
 
 class NeuralNetwork(torch.nn.Module):
     def __init__(self):
         super(NeuralNetwork, self).__init__()
         
-        self.norm_params = None
-        self.batch_size = None
-        self.epochs = None
+        self.norm_params: list = None
+        self.batch_size: int = None
+        self.epochs: int = None
         
         self.layer1 = torch.nn.Linear(17, 32)
         self.relu = torch.nn.ReLU()
@@ -40,19 +43,26 @@ class NeuralNetwork(torch.nn.Module):
         max_vals = torch.tensor(max_vals, dtype=torch.float32).to(x.device)
                 
         return (x - min_vals) / (max_vals - min_vals)
-    
+
 nn = NeuralNetwork().to(device)
 
-dir = os.path.dirname(os.path.abspath(__file__))
-path = os.path.join(dir, 'modelo.pt')
-
+'''path = os.path.join(dir, 'modelo.pt')
 load = torch.load(path, map_location=device)
 nn.load_state_dict(load['state_dict'])
-nn.norm_params = load['norm_params']
+nn.norm_params = load['norm_params']'''
 
-# Parâmetros
-nn.batch_size = 16
-nn.epochs = 341
+def loadModel():
+    # Carregando o modelo
+    id, model_state_dict, model_norm_params, createdAt, _ = getModel()
+        
+    nn.load_state_dict(model_state_dict)
+    nn.norm_params = model_norm_params
+
+    print(f'Modelo {id} - {createdAt} carregado')
+
+    # Hiperparâmetros
+    nn.batch_size = 16
+    nn.epochs = 341
 
 def _predict(features):
     nn.eval()
@@ -67,7 +77,7 @@ def _predict(features):
         
         return int(pred), '{:.2f}'.format(float(max(conf[0], 1-conf[0]) * 100))
     
-def _retrain(optimizer, loss_function, train_loader):
+def _train(optimizer, loss_function, train_loader):
     # Faz uma cópia da rede
     nn_copy = NeuralNetwork().to(device)
     nn_copy.load_state_dict(nn.state_dict())
@@ -101,9 +111,7 @@ def updateMinMax(features):
         if features[i] > max: # Novo valor máximo
             nn.norm_params[i] = (min, features[i])
             
-def retrain(seqs: list, labels: list):
-    start = time.time()
-    
+def train(seqs: list, labels: list):
     # Extrai as features
     features = [extract_features(seq) for seq in seqs]
     
@@ -127,16 +135,28 @@ def retrain(seqs: list, labels: list):
     loss_function = torch.nn.BCELoss()
     
     # Retreina a rede
-    loss = _retrain(optimizer, loss_function, train_loader)
+    loss = _train(optimizer, loss_function, train_loader)
     
-    end = time.time()
+    return loss
+
+def metricas(modelo: object) -> dict:
+    testset = pd.read_csv(os.path.join(dir, 'test.csv'))
     
-    tempo = '{:.2f}'.format(end - start)
+    X = testset.drop('Classe', axis=1)
+    y = testset['Classe']
     
-    print(f'Retreinamento concluído em {tempo} segundos')
-    print(f'Loss: {loss:.4f}\n')
+    X = torch.tensor(X.values, dtype=torch.float32).to(device)
+    y = torch.tensor(y.values, dtype=torch.float32).to(device)
     
-    return tempo, loss
+    modelo.eval()
+    with torch.no_grad():
+        pred = modelo(X)
+        pred = pred.squeeze()
+        pred = (pred > 0.5).cpu().int().numpy()
+        
+        report = classification_report(y.cpu().numpy(), pred, output_dict=True)
+        
+    return report
     
 '''
 validate

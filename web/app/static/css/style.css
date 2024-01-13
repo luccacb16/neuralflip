@@ -164,7 +164,7 @@ html {
     top: 50%;
     transform: translateY(-50%);
   }
-  
+
   .generate-button {
     font-size: 2rem;
     font-weight: 700;
@@ -172,6 +172,10 @@ html {
     color: #04182a;
     background: none;
     font-family: 'Montserrat';
+  }
+
+  .generate-button:hover {
+    color: #c6dcff;
   }
 
   .error-message {
