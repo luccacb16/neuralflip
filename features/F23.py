@@ -1,7 +1,7 @@
 import math
 from collections import Counter
 
-def F23(seq: str) -> int:
+def F23(seq: str) -> float:
     '''
     Feature 23: Entropia Mínima Normalizada
     
@@ -12,7 +12,7 @@ def F23(seq: str) -> int:
         seq (str): sequência
         
     Returns:
-        int: Entropia Mínima Normalizada
+        float: Entropia Mínima Normalizada
     '''
     
     char_freq = Counter(seq)
