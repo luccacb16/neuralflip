@@ -1,4 +1,5 @@
-import F1, F2, F3, F4, F5, F6, F7, F8, F9, F10, F11, F12, F13, F14, F15, F16, F19
+# import F1, F2, F3, F4, F5, F6, F7, F8, F9, F10, F11, F12, F13, F14, F15, F16, F19, F20, F21, F22
+from features_utils import *
 
 seq = '01000101110010110110010001110100101101010010010100'
 seq2 = '00000000000000000000000001111111111111111111111111'
@@ -42,3 +43,12 @@ assert round(F16(seq), 4) == 0.9954
 
 assert F19(seq) == 10
 assert F19(seq2) == 24
+
+assert F20(seq) == 7
+assert F20(seq2) == 24
+
+assert F21(seq) == 16
+assert F21(seq2) == 1
+
+assert F22(seq) == 16
+assert F22(seq2) == 0
