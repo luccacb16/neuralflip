@@ -17,6 +17,9 @@ def F23(seq: str) -> float:
     
     char_freq = Counter(seq)
     prob_dist = {char : count / len(seq) for char, count in char_freq.items()}
+    
+    if len(prob_dist) == 1:
+        return 0
 
     # Calcula a Entropia Mínima Normalizada
     min_entropy = min(-math.log2(prob) for prob in prob_dist.values())

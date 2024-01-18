@@ -24,5 +24,8 @@ def F27(seq: str) -> float:
             current_run = 1
 
     runs.append(current_run)
+    
+    if len(set(runs)) == 1:
+        return 0
 
     return skew(runs)
