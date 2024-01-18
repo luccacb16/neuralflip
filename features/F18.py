@@ -1,9 +1,9 @@
 import numpy as np
 from collections import Counter
 
-def F39(seq: str) -> float:
+def F18(seq: str) -> float:
     '''
-    Feature 39: Média da frequência das runs
+    Feature 18: Média da frequência das runs
     
     Args:
         seq (str): sequência

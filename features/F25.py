@@ -1,16 +1,16 @@
 import numpy as np
 
-def F37(seq: str) -> float:
+def F25(seq: str) -> float:
     '''
-    Feature 36: Desvio padrão do tamanho das sequências de 0s
+    Feature 25: Desvio padrão do tamanho das sequências de 1s
 
     Args: 
         seq (str): sequência
 
     Returns:
-        float: desvio padrão do tamanho das sequências de 0s
+        float: desvio padrão do tamanho das sequências de 1s
     '''
-    sequencias_zeros = seq.split('1')
+    sequencias_zeros = seq.split('0')
     
     comprimentos = [len(s) for s in sequencias_zeros if s]
 
