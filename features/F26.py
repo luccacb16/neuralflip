@@ -1,8 +1,8 @@
 import numpy as np
 
-def F38(seq: str) -> float:
+def F26(seq: str) -> float:
     '''
-    F38: Desvio padrão do tamanho das sequências 
+    F26: Desvio padrão do tamanho das sequências 
     
     Args:
         seq (str): sequência
