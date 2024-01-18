@@ -28,5 +28,8 @@ def F28(seq: str) -> float:
     # Contagem de frequência dos runs de tamanhos 1 a 50
     run_counts = Counter(runs)
     freq_runs = [run_counts[i] for i in range(1, 51)]
+    
+    if len(set(freq_runs)) == 1:
+        return 0
 
     return skew(freq_runs)
