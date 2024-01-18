@@ -24,6 +24,8 @@ def F29(seq: str) -> float:
             current_run = 1
 
     runs.append(current_run)
-    print(runs)
+    
+    if len(set(runs)) == 1:
+        return 0
 
     return kurtosis(runs, fisher=False)
