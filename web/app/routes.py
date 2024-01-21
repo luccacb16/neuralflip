@@ -28,9 +28,12 @@ def routes(app):
         return redirect(url_for('home'))
 
     # Página Sobre
-    @app.route('/sobre/')
+    @app.route('/sobre')
     def sobre():
-        return render_template('sobre.html')
+        language = session.get('language', 'pt-br')
+        session['language'] = language
+        
+        return render_template('sobre_' + language + '.html')
 
     '''
     predict

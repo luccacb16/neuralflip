@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+  <meta charset="utf-8" />
+  <link rel="icon" href="../static/img/favicon.ico" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="theme-color" content="#000000" />
+  <title>Sobre</title>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Montserrat%3A400%2C700%2C800"/>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro%3A400%2C700%2C800"/>
+  <link rel="stylesheet" href="../static/css/sobre-style.css"/>
+</head>
+<body>
+  <div class="container">
+
+    <!-- Header -->
+    <header class="header">
+
+        <div class="header-content">
+          <a href="/"><img class="logo" src="../static/img/logo.png" alt="Logo NeuralFlip"/></a>
+          <a href="/" class="title-text"><h1 class="site-title">NeuralFlip</h1></a>
+        </div>
+
+        <nav class="social-nav">
+            
+            <div class="links-container">
+                <a href="./sobre" class="link about-link">Sobre</a>
+                <a href="./metricas" class="link metricas-link">Métricas</a>
+            </div>    
+
+          <div class="dropdown">
+            <div class="select">
+              <div class="caret"></div>
+              <div class="flag selected"><img src="../static/img/br.png" alt="PT-BR" /></div>
+            </div>
+            <ul class="menu">
+              <li data-value="pt-br" class="flag active"><img src="../static/img/br.png" alt="PT-BR" /></li>
+              <li data-value="en-us" class="flag"><img src="../static/img/us.png" alt="EN-US" /></li>
+            </ul>
+          </div>        
+  
+          <div class="social-icons">
+            <a href="https://github.com/luccacb16/neuralflip"><img class="github-icon" src="../static/img/github.png" alt="GitHub"/></a>
+            <a href="https://www.linkedin.com/company/panda-ufscar/"><img class="linkedin-icon" src="../static/img/linkedin.png" alt="LinkedIn"/></a>
+            <a href="https://www.instagram.com/pandaufscar/"><img class="instagram-icon" src="../static/img/instagram.png" alt="Instagram"/></a>
+          </div>
+        </nav>
+      </header>
+
+    <!-- Sobre -->
+    <div class="sobre">
+
+        <!-- Seção NeuralFlip -->
+        <div class="section">
+          <p class="section-title neural-flip">NeuralFlip</p>
+            <div class="divider"></div>
+            <p class="section-text">
+            <!-- Conteúdo da seção NeuralFlip -->
+                Desenvolvido por <b>Lucca Couto Barberato</b>, <b>Matheus Bessa</b>, <b>Igor Kenji Ueno</b>, <b>Luiz Otávio Mello</b>, 
+                <b>Evandro Gabriel Vianna</b> do Grupo 3 do <b>Grupo de Processamento e Análise de Dados (PANDA)</b> 
+                do Departamento de Computação da UFSCar.
+            </p>
+
+            <p class="section-text">
+                O projeto NeuralFlip consiste de uma rede neural capaz de classificar uma sequência de 50 caractéres 
+                composta de apenas 0s e 1s como: gerada por <b>Humano</b> ou <b>Máquina.</b>
+            </p>
+        </div>
+
+        <!-- Seção Inspiração -->
+        <div class="section">
+          <p class="section-title inspiracao">Inspiração</p>
+            <div class="divider"></div>
+
+            <p class="section-text">
+              A inspiração veio do excelente (e extremamente underrated) vídeo do canal MindingTheData:
+            </p>
+
+            <div class="video-container">
+                <iframe width="560" height="315" src="https://www.youtube.com/embed/2WiRFLImSvE?si=_Q6HJ1rJGuB_KMg3" 
+                title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
+                allowfullscreen></iframe>
+                <p class="video-description">
+                    <a href="https://www.youtube.com/watch?v=2WiRFLImSvE" class="video-legend" target="_blank">MindingTheData - Are You Good at Being Random? | Attempting to Fake Randomness</a>
+                </p>
+            </div>
+
+            <p class="section-text">
+              No vídeo dele, ele utiliza um RandomForest para classificar as sequências, então pensamos, 
+              por que não utilizar uma rede neural? =)
+            </p>
+        </div>
+
+        <!-- Seção Dataset -->
+        <div class="section">
+          <p class="section-title dataset">Dataset</p>
+            <div class="divider"></div>
+            <p class="section-text">
+                Assim como no vídeo utilizado como referência, realizamos uma coleta pelo 
+                <a href="https://forms.gle/8nFWAZzK9iZLLRHw8" class="external-link" target="_blank">Google Forms</a> 
+                para a obtenção de sequências geradas por humanos. Ao total obtivemos 115 respostas, que resultaram em 488 
+                sequências únicas e válidas. 
+                <br><br>Além disso, o dono do canal MindingTheData nos enviou 85 sequências humanas 
+                que ele coletou em seu experimento, resultando então em 573 sequências. Para as sequências de máquina (pseudo-aleatórias), 
+                utilizamos um script em Python, gerando mais 573 exemplos, a fim de manter o balanceamento entre as classes. 
+                Ao total, o conjunto de dados possui 1140 sequências únicas.
+                <br><br>
+                A partir das sequências, foram extraídas diversas features, que servem como as entradas da rede neural. 
+                Algumas delas são: número de 0s, número de transições entre 0 e 1, complexidade de lempel-ziv. 
+                Ao total, foram criadas X features e foram selecionadas Y para serem utilizadas na rede neural 
+                após um processo de feature selection.
+            </p>
+        </div>
+
+        <div class="section">
+            <p class="section-title">Rede Neural</p>
+            <div class="divider"></div>
+            <p class="section-text">
+                A rede neural foi criada utilizando a biblioteca PyTorch e possui a seguinte arquitetura:
+            </p>
+            <ul class="section-list">
+                <li>Arquitetura;</li>
+                <li>Y neurônios na camada de entrada;</li>
+                <li>W camadas ocultas com Z neurônios cada, com função de ativação ReLU;</li>
+                <li>Camada de saída com 1 neurônio, com função de ativação Sigmoid.</li>
+            </ul>
+            <p class="section-text">
+                A rede neural foi treinada utilizando o algoritmo de otimização Adam e a função de perda Binary 
+                Cross Entropy Loss (BCE Loss). O treinamento foi realizado por E épocas, com um batch size de B. 
+            </p>
+        </div>
+        
+
+        <!-- Seção Resultados -->
+        <div class="section">
+            <p class="section-title resultados">Resultados</p>
+            <div class="divider"></div>
+            <p class="section-text">
+            <!-- Conteúdo da seção Resultados -->
+            </p>
+        </div>
+
+        <!-- ... Outros elementos ... -->
+        </div>
+  </div>
+  
+  <script src="../static/js/language.js" type="module"></script>
+</body>
+</html>
