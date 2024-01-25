@@ -1,15 +1,12 @@
-import torch
 from torch.utils.data import DataLoader, TensorDataset
+import torch
 import os
-from sklearn.metrics import classification_report
-import pandas as pd
 
 from .features import extract_features
 from ..db.models import getModel
 
 dir = os.path.dirname(os.path.abspath(__file__))
 device = 'cpu'
-
 class NeuralNetwork(torch.nn.Module):
     def __init__(self):
         super(NeuralNetwork, self).__init__()
@@ -138,25 +135,6 @@ def train(seqs: list, labels: list):
     loss = _train(optimizer, loss_function, train_loader)
     
     return loss
-
-def metricas(modelo: object) -> dict:
-    testset = pd.read_csv(os.path.join(dir, 'test.csv'))
-    
-    X = testset.drop('Classe', axis=1)
-    y = testset['Classe']
-    
-    X = torch.tensor(X.values, dtype=torch.float32).to(device)
-    y = torch.tensor(y.values, dtype=torch.float32).to(device)
-    
-    modelo.eval()
-    with torch.no_grad():
-        pred = modelo(X)
-        pred = pred.squeeze()
-        pred = (pred > 0.5).cpu().int().numpy()
-        
-        report = classification_report(y.cpu().numpy(), pred, output_dict=True)
-        
-    return report
     
 '''
 validate
