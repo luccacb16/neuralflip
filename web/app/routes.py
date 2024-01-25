@@ -1,9 +1,11 @@
 from flask import render_template, request, redirect, url_for, jsonify, session
 from random import choices
 import time
+import os
 
 from .utils.features import extract_features
-from .utils.nn import _predict, validate, train, metricas, nn
+from .utils.nn import _predict, validate, train, nn
+from .utils.metrics import saveMetrics, getTestSetMetricsReport, metrics_img_dir
 
 from .db.sequences import addSequenceToDB, checkRetrain, getSequences
 from .db.models import saveModel
@@ -34,6 +36,21 @@ def routes(app):
         session['language'] = language
         
         return render_template('sobre_' + language + '.html')
+    
+    # Página Métricas
+    @app.route('/metricas')
+    def metricas():
+        language = session.get('language', 'pt-br')
+        session['language'] = language
+        
+        # Obtendo as métricas
+        imgs = ['accprecrecf1', 'confusionmatrix', 'precision', 'recall']
+        
+        if not all([os.path.isfile(metrics_img_dir + img + '_' + language + '.png') for img in imgs]):
+            report, cm = getTestSetMetricsReport(nn)
+            saveMetrics(report, cm)
+        
+        return render_template('metricas_' + language + '.html')
 
     '''
     predict
@@ -82,7 +99,7 @@ def routes(app):
     def retrain():
         if checkRetrain(8):            
             # Salva o modelo no BD
-            report = metricas(nn)
+            report, _ = getTestSetMetricsReport(nn)
             saveModel(nn, report)
     
             seqs, labels = getSequences()
@@ -92,6 +109,10 @@ def routes(app):
             end = time.time()
             
             tempo = '{:.2f}'.format(end - start)
+            
+            # Atualiza as imagens das métricas
+            report, cm = getTestSetMetricsReport(nn)
+            saveMetrics(report, cm, session['language'])
             
             print(f'Tempo de retreinamento: {tempo} segundos - Loss: {loss:.4f}')
             return jsonify({ 'msg': 'Retreinamento concluído', 'tempo': tempo, 'loss': loss }), 200

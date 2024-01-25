@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+  <meta charset="utf-8" />
+  <link rel="icon" href="../static/img/favicon.ico" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="theme-color" content="#000000" />
+  <title>Métricas</title>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Montserrat%3A400%2C700%2C800"/>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro%3A400%2C700%2C800"/>
+  <link rel="stylesheet" href="../static/css/metricas-style.css"/>
+</head>
+<body>
+  <div class="container">
+
+    <!-- Header -->
+    <header class="header">
+
+        <div class="header-content">
+          <a href="/"><img class="logo" src="../static/img/logo.png" alt="Logo NeuralFlip"/></a>
+          <a href="/" class="title-text"><h1 class="site-title">NeuralFlip</h1></a>
+        </div>
+
+        <nav class="social-nav">
+            
+            <div class="links-container">
+                <a href="./sobre" class="link about-link">Sobre</a>
+                <a href="./metricas" class="link metricas-link">Métricas</a>
+            </div>    
+
+          <div class="dropdown">
+            <div class="select">
+              <div class="caret"></div>
+              <div class="flag selected"><img src="../static/img/br.png" alt="PT-BR" /></div>
+            </div>
+            <ul class="menu">
+              <li data-value="pt-br" class="flag active"><img src="../static/img/br.png" alt="PT-BR" /></li>
+              <li data-value="en-us" class="flag"><img src="../static/img/us.png" alt="EN-US" /></li>
+            </ul>
+          </div>        
+  
+          <div class="social-icons">
+            <a href="https://github.com/luccacb16/neuralflip"><img class="github-icon" src="../static/img/github.png" alt="GitHub"/></a>
+            <a href="https://www.linkedin.com/company/panda-ufscar/"><img class="linkedin-icon" src="../static/img/linkedin.png" alt="LinkedIn"/></a>
+            <a href="https://www.instagram.com/pandaufscar/"><img class="instagram-icon" src="../static/img/instagram.png" alt="Instagram"/></a>
+          </div>
+        </nav>
+      </header>
+
+    <!-- Métricas -->
+    <div class="graficos-container">
+        <div class="grafico-grupo">
+          <div class="grafico">
+            <p class="accprecrecf1-titulo">Métricas</p>
+            <img src="../static/img/metrics/accprecrecf1_pt-br.png" class="accprecrecf1" alt="AccPrecRecF1"/>
+          </div>
+          <div class="grafico">
+            <p class="cm-titulo">Matriz de Confusão</p>
+            <img src="../static/img/metrics/confusionmatrix_pt-br.png" class="cm" alt="Confusion Matrix"/>
+          </div>
+        </div>
+        <div class="grafico-grupo">
+          <div class="grafico">
+            <p class="precision-titulo">Precisão</p>
+            <img src="../static/img/metrics/precision_pt-br.png" class="precision" alt="Precision"/>
+          </div>
+          <div class="grafico">
+            <p class="recall-titulo">Recall</p>
+            <img src="../static/img/metrics/recall_pt-br.png" class="recall" alt="Recall"/>
+          </div>
+        </div>
+      </div>       
+    
+  </div>
+  
+  <script src="../static/js/language.js" type="module"></script>
+</body>
+</html>
