@@ -49,13 +49,22 @@ nn.load_state_dict(load['state_dict'])
 nn.norm_params = load['norm_params']'''
 
 def loadModel():
-    # Carregando o modelo
-    id, model_state_dict, model_norm_params, createdAt, _ = getModel()
+    # Verifica se há um modelo salvo no BD
+    try:
+        # Carregando o modelo
+        id, model_state_dict, model_norm_params, createdAt, _ = getModel()
+        print(f'Modelo {id} - {createdAt} carregado')
+    except:
+        # Carrega o modelo do arquivo
+        path = os.path.join(dir, 'modelo.pt')
+        load = torch.load(path, map_location=device)
+        model_state_dict = load['state_dict']
+        model_norm_params = load['norm_params']
         
+        print('Nenhum modelo no BD - carregado do arquivo')
+            
     nn.load_state_dict(model_state_dict)
     nn.norm_params = model_norm_params
-
-    print(f'Modelo {id} - {createdAt} carregado')
 
     # Hiperparâmetros
     nn.batch_size = 16
