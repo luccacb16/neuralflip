@@ -5,7 +5,7 @@ import os
 
 from .utils.features import extract_features
 from .utils.nn import _predict, validate, train, nn
-from .utils.metrics import saveMetrics, getTestSetMetricsReport, metrics_img_dir
+from .utils.metrics import saveMetrics, getTestSetMetricsReport, metrics_img_dir, plotModelEvolution
 
 from .db.sequences import addSequenceToDB, checkRetrain, getSequences
 from .db.models import saveModel
@@ -49,8 +49,11 @@ def routes(app):
         if not all([os.path.isfile(metrics_img_dir + img + '_' + language + '.png') for img in imgs]):
             report, cm = getTestSetMetricsReport(nn)
             saveMetrics(report, cm)
+            
+        # Evolução dos modelos
+        evolution_html = plotModelEvolution(language)
         
-        return render_template('metricas_' + language + '.html')
+        return render_template('metricas_' + language + '.html', evolution_plot=evolution_html)
 
     '''
     predict

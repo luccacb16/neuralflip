@@ -30,3 +30,12 @@ def getModel(id: int = None) -> tuple:
 
 def getDatetime(timezone="America/Sao_Paulo"):
     return pytz.timezone(timezone).localize(datetime.datetime.now())
+
+def getModelsReportsAndDates() -> list:
+    models = Models.query.order_by(Models.createdAt.desc()).all()
+    
+    modelsReportsAndDates = []
+    for model in models:
+        modelsReportsAndDates.append((model.report, model.createdAt))
+    
+    return modelsReportsAndDates

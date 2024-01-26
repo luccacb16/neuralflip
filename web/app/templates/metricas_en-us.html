@@ -47,11 +47,17 @@
         </nav>
       </header>
 
+    <!-- Evolução do Modelo -->
+    <div class="evolucao-modelo-container">
+      <h2 class="evolucao-titulo">Model Evolution</h2>
+      {{ evolution_plot|safe }}
+    </div>
+
     <!-- Métricas -->
     <div class="graficos-container">
         <div class="grafico-grupo">
           <div class="grafico">
-            <p class="accprecrecf1-titulo">Metrics</p>
+            <p class="accprecrecf1-titulo">General Metrics</p>
             <img src="../static/img/metrics/accprecrecf1_en-us.png" class="accprecrecf1" alt="AccPrecRecF1"/>
           </div>
           <div class="grafico">
