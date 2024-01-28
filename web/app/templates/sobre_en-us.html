@@ -119,25 +119,30 @@
                 We used the PyTorch library to code the neural network model and it has the following architecture:
             </p>
             <ul class="section-list">
-                <li>Architecture;</li>
-                <li>Y neurons in the input layer;</li>
-                <li>W hidden layers with Z neurons each, with ReLU activation function;</li>
-                <li>Output layer with 1 neuron, with Sigmoid activation function.</li>
+              <li>Fully connected;</li>
+              <li>35 neurons in the input layer;</li>
+              <li>3 hidden layers with 64, 32 and 16 neurons, all with Leaky ReLU activation function (a = 0.01);</li>
+              <li>Output layer with 1 neuron, with Sigmoid activation function.</li>
             </ul>
             <p class="section-text">
                 The neural network was trained using the Adam optimization algorithm and the Binary 
-                Cross Entropy Loss (BCE Loss) loss function. The training was performed for E epochs, with a batch size of B.
+                Cross Entropy Loss (BCE Loss) loss function. The training was performed for 16 epochs, with a batch size of 16.
+            </p>
+            <p class="section-text">
+              A cross-validation was performed with 5 folds. In each fold, evaluation metrics were monitored
+              and the loss in both training and validation. Furthermore, the training and testing set were saved with each fold.
+              You can access the notebook with neural network training <a href="https://github.com/luccacb16/neuralflip/tree/main/train" class="external-link"> here</a>.
             </p>
         </div>
         
 
         <!-- Seção Resultados -->
         <div class="section">
-            <p class="section-title">Results</p>
-            <div class="divider"></div>
-            <p class="section-text">
-            <!-- Conteúdo da seção Resultados -->
-            </p>
+          <p class="section-title resultados">Results</p>
+          <div class="divider"></div>
+          <p class="section-text">
+            The results can be seen on the <a href="./metricas" class="external-link">Metrics</a> page.
+          </p>
         </div>
 
         <!-- ... Outros elementos ... -->
