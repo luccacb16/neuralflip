@@ -1,36 +1,62 @@
 from torch.utils.data import DataLoader, TensorDataset
+import torch.nn.functional as F
+from torch import nn
 import torch
 import os
 
+from .metrics import getTestSetMetricsReport
 from .features import extract_features
-from ..db.models import getModel
+from ..db.models import getModel, saveModel, checkForModel
 
 dir = os.path.dirname(os.path.abspath(__file__))
 device = 'cpu'
-class NeuralNetwork(torch.nn.Module):
+class NeuralNetwork(nn.Module):
     def __init__(self):
         super(NeuralNetwork, self).__init__()
         
-        self.norm_params: list = None
-        self.batch_size: int = None
-        self.epochs: int = None
+        # Salvar os parâmetros de normalização
+        self.norm_params = None
         
-        self.layer1 = torch.nn.Linear(17, 32)
-        self.relu = torch.nn.ReLU()
-        
-        self.layer2 = torch.nn.Linear(32, 32)
-        
-        self.output = torch.nn.Linear(32, 1)
-        self.sigmoid = torch.nn.Sigmoid()
+        self.batch_size = None
+        self.epochs = None
 
+        '''
+        Arquitetura:
+        - Fully Connected
+        - n_features x 64 com Normalização de Lote e Dropout de 0.1 e LeakyReLU
+        - 64 x 32 com Normalização de Lote e Dropout de 0.1 e LeakyReLU
+        - 32 x 16 com Normalização de Lote e Dropout de 0.1 e LeakyReLU
+        - 16 x 1 com Sigmoid (para obter a probabilidade/confiança)
+        '''
+        
+        self.fc1 = nn.Linear(35, 64)
+        # Batch Normalization: Normalizar os dados para evitar overfitting
+        self.bn1 = nn.BatchNorm1d(64)
+
+        self.fc2 = nn.Linear(64, 32)
+        self.bn2 = nn.BatchNorm1d(32)
+        
+        self.fc3 = nn.Linear(32, 16)
+        self.bn3 = nn.BatchNorm1d(16)
+
+        self.fc4 = nn.Linear(16, 1)
+
+        # Dropout: Desligar neurônios aleatoriamente para evitar overfitting
+        self.dropout = nn.Dropout(0.1)
+        
+        # Inicialização dos pesos e bias com Kaiming Uniform
+        self.apply(self.init_weights)
+
+    # Feed Forward
     def forward(self, x):
         if self.norm_params is not None:
             x = self.normalize(x)
-                    
-        x = self.relu(self.layer1(x))
-        x = self.relu(self.layer2(x))
-        x = self.sigmoid(self.output(x))
-        
+            
+        x = self.dropout(F.leaky_relu(self.bn1(self.fc1(x))))
+        x = self.dropout(F.leaky_relu(self.bn2(self.fc2(x))))
+        x = self.dropout(F.leaky_relu(self.bn3(self.fc3(x))))
+
+        x = torch.sigmoid(self.fc4(x))
         return x
     
     def normalize(self, x):
@@ -40,43 +66,52 @@ class NeuralNetwork(torch.nn.Module):
         max_vals = torch.tensor(max_vals, dtype=torch.float32).to(x.device)
                 
         return (x - min_vals) / (max_vals - min_vals)
+    
+    # Inicialização dos pesos e bias com Kaiming Uniform
+    def init_weights(self, m):
+        if isinstance(m, nn.Linear):
+            nn.init.kaiming_uniform_(m.weight, mode='fan_in', nonlinearity='relu')
+            if m.bias is not None:
+                nn.init.zeros_(m.bias)
 
-nn = NeuralNetwork().to(device)
-
-'''path = os.path.join(dir, 'modelo.pt')
-load = torch.load(path, map_location=device)
-nn.load_state_dict(load['state_dict'])
-nn.norm_params = load['norm_params']'''
+model = NeuralNetwork().to(device)
 
 def loadModel():
-    # Verifica se há um modelo salvo no BD
-    try:
+    if checkForModel(): # Verifica se há um modelo salvo no BD
         # Carregando o modelo
         id, model_state_dict, model_norm_params, createdAt, _ = getModel()
+        model.load_state_dict(model_state_dict)
+        model.norm_params = model_norm_params
+        # Hiperparâmetros
+        model.batch_size = 16
+        model.epochs = 16
+        
         print(f'Modelo {id} - {createdAt} carregado')
-    except:
+    else:
         # Carrega o modelo do arquivo
         path = os.path.join(dir, 'modelo.pt')
-        load = torch.load(path, map_location=device)
-        model_state_dict = load['state_dict']
-        model_norm_params = load['norm_params']
+        load = torch.load(path)
         
+        model.load_state_dict(load['state_dict'])
+        model.norm_params = load['norm_params']
+        
+        # Hiperparâmetros
+        model.batch_size = 16
+        model.epochs = 16
         print('Nenhum modelo no BD - carregado do arquivo')
-            
-    nn.load_state_dict(model_state_dict)
-    nn.norm_params = model_norm_params
-
-    # Hiperparâmetros
-    nn.batch_size = 16
-    nn.epochs = 341
+    
+        # Salva o modelo no BD
+        report, _ = getTestSetMetricsReport(model)
+        saveModel(model, report)
 
 def _predict(features):
-    nn.eval()
+    model.eval()
     
-    input = torch.tensor(features, dtype=torch.float32).to(device)
-        
+    input = torch.tensor(features, dtype=torch.float32).to(device) # Converte para tensor
+    input = input.unsqueeze(0) # Adiciona uma dimensão
+                
     with torch.no_grad():
-        output = nn(input)
+        output = model(input)
         
         conf = output.cpu().numpy()
         pred = (conf[0] > 0.5).astype(int)
@@ -86,11 +121,11 @@ def _predict(features):
 def _train(optimizer, loss_function, train_loader):
     # Faz uma cópia da rede
     nn_copy = NeuralNetwork().to(device)
-    nn_copy.load_state_dict(nn.state_dict())
+    nn_copy.load_state_dict(model.state_dict())
+    nn_copy.norm_params = model.norm_params
     
     nn_copy.train()
-    
-    for epoch in range(nn.epochs):
+    for epoch in range(model.epochs):
         epoch_loss = 0
         for x, y in train_loader:
             optimizer.zero_grad()
@@ -105,17 +140,18 @@ def _train(optimizer, loss_function, train_loader):
         epoch_loss /= len(train_loader)
             
     # Atualiza a rede
-    nn.load_state_dict(nn_copy.state_dict())
+    model.load_state_dict(nn_copy.state_dict())
+    model.norm_params = nn_copy.norm_params
     
     return epoch_loss
 
 def updateMinMax(features):  
-    for i, (min, max) in enumerate(nn.norm_params):
+    for i, (min, max) in enumerate(model.norm_params):
         if features[i] < min: # Novo valor mínimo
-            nn.norm_params[i] = (features[i], max)
+            model.norm_params[i] = (features[i], max)
             
         if features[i] > max: # Novo valor máximo
-            nn.norm_params[i] = (min, features[i])
+            model.norm_params[i] = (min, features[i])
             
 def train(seqs: list, labels: list):
     # Extrai as features
@@ -124,20 +160,18 @@ def train(seqs: list, labels: list):
     # Verifica novos valores mínimos e máximos
     for feature in features:
         updateMinMax(feature)
-    
-    # Normaliza as features
-    features = [nn.normalize(torch.tensor(f, dtype=torch.float32)) for f in features]
-    
+        
     # Converte as features e labels para tensor
-    features = torch.stack(features).to(device)
+    features_tensor = [torch.tensor(feature, dtype=torch.float32) for feature in features]
+    features = torch.stack(features_tensor).to(device)
     labels = torch.tensor(labels, dtype=torch.float32).to(device)
     
     # Cria um DataLoader
     train_data = TensorDataset(features, labels)
-    train_loader = DataLoader(train_data, batch_size=nn.batch_size, shuffle=True)
+    train_loader = DataLoader(train_data, batch_size=model.batch_size, shuffle=True)
     
     # Cria o otimizador
-    optimizer = torch.optim.Adam(nn.parameters())
+    optimizer = torch.optim.Adam(model.parameters())
     loss_function = torch.nn.BCELoss()
     
     # Retreina a rede

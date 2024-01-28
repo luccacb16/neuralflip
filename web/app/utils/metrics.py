@@ -6,6 +6,8 @@ import pandas as pd
 import torch
 import os
 
+import pprint
+
 from sklearn.metrics import classification_report, confusion_matrix, ConfusionMatrixDisplay
 
 from ..db.models import getModelsReportsAndDates
@@ -22,7 +24,7 @@ metrics_img_dir = os.path.join(dir, '../static/img/metrics/')
 figsize = (10, 6)
 fontsize = 14
 
-def getTestSetMetricsReport(modelo: object) -> dict:
+def getTestSetMetricsReport(modelo) -> dict:
     X = testset.drop('Classe', axis=1)
     y = testset['Classe']
     
@@ -36,7 +38,6 @@ def getTestSetMetricsReport(modelo: object) -> dict:
         pred = (pred > 0.5).cpu().int().numpy()
         
         report = classification_report(y.cpu().numpy(), pred, output_dict=True)
-        
         cm = confusion_matrix(y.cpu().numpy(), pred)
         
     return report, cm
@@ -156,7 +157,8 @@ def plotModelEvolution(language='pt-br'):
     }
 
     reports = getModelsReportsAndDates()
-
+        
+    # Processamento dos dados
     dates = [report[1] for report in reports]
     accuracies = [report[0]['accuracy'] for report in reports]
     precisions = [report[0]['weighted avg']['precision'] for report in reports]
@@ -168,7 +170,7 @@ def plotModelEvolution(language='pt-br'):
     fig.add_trace(go.Scatter(
         x=dates, 
         y=accuracies, 
-        mode='lines+markers', 
+        mode='lines+markers',
         name=languageMap[language]['Accuracy'],
         hoverinfo='text',
         text=[
