@@ -25,8 +25,6 @@ def F18(seq: str) -> float:
     run_counts = Counter(runs)
     freq_runs = [run_counts[i] for i in range(1, 51)]
     
-    print(freq_runs)
-    
     if len(set(freq_runs)) == 1:
         return 0
         
