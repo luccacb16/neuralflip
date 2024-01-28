@@ -116,28 +116,32 @@
             <p class="section-title">Rede Neural</p>
             <div class="divider"></div>
             <p class="section-text">
-                A rede neural foi criada utilizando a biblioteca PyTorch e possui a seguinte arquitetura:
+              A rede neural foi criada utilizando a biblioteca PyTorch e possui a seguinte arquitetura:
             </p>
             <ul class="section-list">
-                <li>Arquitetura;</li>
-                <li>Y neurônios na camada de entrada;</li>
-                <li>W camadas ocultas com Z neurônios cada, com função de ativação ReLU;</li>
-                <li>Camada de saída com 1 neurônio, com função de ativação Sigmoid.</li>
+              <li>Totalmente conectada;</li>
+              <li>35 neurônios na camada de entrada;</li>
+              <li>3 camadas ocultas com 64, 32 e 16 neurônios, todas com função de ativação Leaky ReLU (a = 0.01);</li>
+              <li>Camada de saída com 1 neurônio, com função de ativação Sigmoid.</li>
             </ul>
             <p class="section-text">
-                A rede neural foi treinada utilizando o algoritmo de otimização Adam e a função de perda Binary 
-                Cross Entropy Loss (BCE Loss). O treinamento foi realizado por E épocas, com um batch size de B. 
+              A rede neural foi treinada utilizando o algoritmo de otimização Adam e a função de perda Binary 
+              Cross Entropy Loss (BCE Loss). O treinamento foi realizado por 16 épocas, com um batch size de 16.
+            </p>
+            <p class="section-text">
+              Foi realizada uma validação cruzada com 5 folds. Em cada fold, foram monitoradas as métricas de avaliação
+              e a perda tanto no treino quanto na validação. Além disso, o conjunto de treino e teste foram salvos a cada fold.
+              É possível acessar o notebook com o treinamento da rede neural <a href="https://github.com/luccacb16/neuralflip/tree/main/train" class="external-link"> aqui</a>.
             </p>
         </div>
-        
 
         <!-- Seção Resultados -->
         <div class="section">
-            <p class="section-title resultados">Resultados</p>
-            <div class="divider"></div>
-            <p class="section-text">
-            <!-- Conteúdo da seção Resultados -->
-            </p>
+          <p class="section-title resultados">Resultados</p>
+          <div class="divider"></div>
+          <p class="section-text">
+            Os resultados podem ser vistos na página <a href="./metricas" class="external-link">Métricas</a>.
+          </p>
         </div>
 
         <!-- ... Outros elementos ... -->
