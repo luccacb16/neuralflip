@@ -1,10 +1,10 @@
 from flask import render_template, request, redirect, url_for, jsonify, session
-from random import choices
+from random import choices, shuffle
 import time
 import os
 
 from .utils.features import extract_features
-from .utils.nn import _predict, validate, train, nn
+from .utils.nn import _predict, validate, train, model
 from .utils.metrics import saveMetrics, getTestSetMetricsReport, metrics_img_dir, plotModelEvolution
 
 from .db.sequences import addSequenceToDB, checkRetrain, getSequences
@@ -47,7 +47,7 @@ def routes(app):
         imgs = ['accprecrecf1', 'confusionmatrix', 'precision', 'recall']
         
         if not all([os.path.isfile(metrics_img_dir + img + '_' + language + '.png') for img in imgs]):
-            report, cm = getTestSetMetricsReport(nn)
+            report, cm = getTestSetMetricsReport(model)
             saveMetrics(report, cm)
             
         # Evolução dos modelos
@@ -74,7 +74,7 @@ def routes(app):
         
         # Extração das features
         features = extract_features(seq)
-            
+        
         # Predição e Confiança
         pred, conf = _predict(features)
         
@@ -100,22 +100,27 @@ def routes(app):
     
     @app.get('/retrain')
     def retrain():
-        if checkRetrain(8):            
-            # Salva o modelo no BD
-            report, _ = getTestSetMetricsReport(nn)
-            saveModel(nn, report)
-    
+        if checkRetrain(8):   
             seqs, labels = getSequences()
             
+            # Embaralha as tuplas
+            seqs_labels = list(zip(seqs, labels))
+            shuffle(seqs_labels)
+            seqs, labels = zip(*seqs_labels)
+                        
             start = time.time()
             loss = train(seqs, labels)
             end = time.time()
             
             tempo = '{:.2f}'.format(end - start)
             
+            report, cm = getTestSetMetricsReport(model)
+            
+            # Salva o novo modelo
+            saveModel(model, report)
+            
             # Atualiza as imagens das métricas
-            report, cm = getTestSetMetricsReport(nn)
-            saveMetrics(report, cm, session['language'])
+            saveMetrics(report, cm)
             
             print(f'Tempo de retreinamento: {tempo} segundos - Loss: {loss:.4f}')
             return jsonify({ 'msg': 'Retreinamento concluído', 'tempo': tempo, 'loss': loss }), 200
