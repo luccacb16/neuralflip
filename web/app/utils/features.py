@@ -728,6 +728,9 @@ features_list = [F1, F2, F3, F4, F5, F6, F7, F8, F9, F10,
                 F21, F22, F23, F24, F25, F26, F27, F28, F29, F30,
                 F31, F32, F33, F34, F35]
 
+selected_features = [F1, F7, F8, F9, F11, F12, F15, F16, F17, F19, F20,
+                    F22, F24, F25, F26, F27, F28, F29, F30, F32, F33, F34, F35]
+
 '''
 extract_features
 
@@ -740,4 +743,4 @@ Returns:
     - features (list): features extraídas
 '''
 def extract_features(seq: str) -> list:
-    return [f(seq) for f in features_list]
+    return [f(seq) for f in selected_features]
