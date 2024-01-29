@@ -107,7 +107,7 @@
                 <br><br>
                 From the sequences, several features were extracted, which serve as the inputs of the neural network.
                 Some of them are: number of 0s, number of transitions between 0 and 1, lempel-ziv complexity.
-                In total, X features were created and Y were selected to be used in the neural network
+                In total, 35 features were created and 23 were selected to be used in the neural network
                 after a feature selection process.
             </p>
         </div>
@@ -120,13 +120,13 @@
             </p>
             <ul class="section-list">
               <li>Fully connected;</li>
-              <li>35 neurons in the input layer;</li>
+              <li>23 neurons in the input layer;</li>
               <li>3 hidden layers with 64, 32 and 16 neurons, all with Leaky ReLU activation function (a = 0.01);</li>
               <li>Output layer with 1 neuron, with Sigmoid activation function.</li>
             </ul>
             <p class="section-text">
                 The neural network was trained using the Adam optimization algorithm and the Binary 
-                Cross Entropy Loss (BCE Loss) loss function. The training was performed for 16 epochs, with a batch size of 16.
+                Cross Entropy Loss (BCE Loss) loss function. The training was performed for 24 epochs, with a batch size of 16.
             </p>
             <p class="section-text">
               A cross-validation was performed with 5 folds. In each fold, evaluation metrics were monitored

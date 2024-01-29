@@ -103,11 +103,11 @@
                 <br><br>Além disso, o dono do canal MindingTheData nos enviou 85 sequências humanas 
                 que ele coletou em seu experimento, resultando então em 573 sequências. Para as sequências de máquina (pseudo-aleatórias), 
                 utilizamos um script em Python, gerando mais 573 exemplos, a fim de manter o balanceamento entre as classes. 
-                Ao total, o conjunto de dados possui 1140 sequências únicas.
+                Ao total, o conjunto de dados possui 1146 sequências únicas.
                 <br><br>
                 A partir das sequências, foram extraídas diversas features, que servem como as entradas da rede neural. 
                 Algumas delas são: número de 0s, número de transições entre 0 e 1, complexidade de lempel-ziv. 
-                Ao total, foram criadas X features e foram selecionadas Y para serem utilizadas na rede neural 
+                Ao total, foram criadas 35 features e foram selecionadas 23 para serem utilizadas na rede neural 
                 após um processo de feature selection.
             </p>
         </div>
@@ -120,13 +120,13 @@
             </p>
             <ul class="section-list">
               <li>Totalmente conectada;</li>
-              <li>35 neurônios na camada de entrada;</li>
+              <li>23 neurônios na camada de entrada;</li>
               <li>3 camadas ocultas com 64, 32 e 16 neurônios, todas com função de ativação Leaky ReLU (a = 0.01);</li>
               <li>Camada de saída com 1 neurônio, com função de ativação Sigmoid.</li>
             </ul>
             <p class="section-text">
               A rede neural foi treinada utilizando o algoritmo de otimização Adam e a função de perda Binary 
-              Cross Entropy Loss (BCE Loss). O treinamento foi realizado por 16 épocas, com um batch size de 16.
+              Cross Entropy Loss (BCE Loss). O treinamento foi realizado por 24 épocas, com um batch size de 16.
             </p>
             <p class="section-text">
               Foi realizada uma validação cruzada com 5 folds. Em cada fold, foram monitoradas as métricas de avaliação

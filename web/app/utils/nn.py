@@ -29,7 +29,7 @@ class NeuralNetwork(nn.Module):
         - 16 x 1 com Sigmoid (para obter a probabilidade/confiança)
         '''
         
-        self.fc1 = nn.Linear(35, 64)
+        self.fc1 = nn.Linear(23, 64)
         # Batch Normalization: Normalizar os dados para evitar overfitting
         self.bn1 = nn.BatchNorm1d(64)
 
@@ -97,7 +97,7 @@ def loadModel():
         
         # Hiperparâmetros
         model.batch_size = 16
-        model.epochs = 16
+        model.epochs = 24
         print('Nenhum modelo no BD - carregado do arquivo')
     
         # Salva o modelo no BD
